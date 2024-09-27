@@ -72,7 +72,7 @@ Transações permitem que um conjunto de operações seja tratado como uma únic
 com sucesso ou que nenhuma seja aplicada, no caso de falha.
 Conceitos chave:
 - BEGIN: Inicia uma transação.
-- COMMIT: Confirma todas as operações realizadas na transação.
+- COMMIT: Confirma todas as operações realizadas na transação.clientes
 - ROLLBACK: Reverte todas as operações realizadas na transação em caso de erro.*/
 
 #Exemplo 1: Transferência entre contas
