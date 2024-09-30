@@ -147,41 +147,37 @@ select calculaVendas(1);
 
 #b) Inserir uma nova venda e atualizar o estoque.
 delimiter //
-create procedure registrarVenda(in id int, in qtd int, in preco decimal(10,2))
+create procedure novaVenda(id int, qtd_vendida int)
 begin
 
-insert into vendas (id_palmito, quantidade_vendida, data_venda, preco_total) values
-(id, qtd, curdate(), preco);
+declare preco_unit int;
+declare estoque_atualizado int;
+declare preco_total int;
 
-end //
-delimiter ;
+select estoque_atual, preco_venda into estoque_atualizado, preco_unit from palmitos where id = id_palmito;
 
-call registrarVenda (3, 2, 150.00);
+if estoque_atualizado >= qtd_vendida then
+set preco_total = qtd_vendida * preco_unit;
 
-select * from vendas;
+insert into vendas (id_palmito, quantidade_vendida, data_venda, preco_total) values (id, qtd_vendida, curdate(), preco_total);
 
-delimiter //
-create procedure atualizarEstoque()
-begin
-	declare estoqueAtualizado int;
-    
-    set estoqueAtualizado = estoque_atual - registrarVenda(id,qtd);
-    
-    update palmitos set estoque_atual = estoqueAtualizado where id_palmito = id;
+update palmitos set estoque_atual = estoque_atual - qtd_vendida where id = id_palmito;
+
+end if;
 end//
 delimiter ;
 
-call atualizarEstoque();
+call novaVenda(5, 20);
+select * from vendas;
 
 #c) Atualizar o estoque automaticamente ao inserir uma nova compra.
-delimiter //
-create trigger vender
-after insert on vendas
-for each row
 
-begin
-call baixarEstoque(new.idLivro, new.quantidade);
-end //
+delimiter //
+
+create trigger venda
+after insert on vendas
+for
+
 delimiter ;
 
 #3. Criação de Views:
