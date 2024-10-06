@@ -137,7 +137,7 @@ create function calculaVendas(id int) returns decimal(10,2)
 begin
 declare totalVendas int;
 
-select count(quantidade_vendida) into totalVendas from vendas where id_palmito = id;
+select sum(quantidade_vendida) into totalVendas from vendas where id_palmito = id;
 
 return totalVendas;
 end //
@@ -162,7 +162,6 @@ set preco_total = qtd_vendida * preco_unit;
 insert into vendas (id_palmito, quantidade_vendida, data_venda, preco_total) values (id, qtd_vendida, curdate(), preco_total);
 
 update palmitos set estoque_atual = estoque_atual - qtd_vendida where id = id_palmito;
-
 end if;
 end//
 delimiter ;
@@ -172,16 +171,38 @@ select * from vendas;
 
 #c) Atualizar o estoque automaticamente ao inserir uma nova compra.
 
+select * from palmitos;
+
 delimiter //
+create trigger atualizarEstoquePosCompra
+after insert on compras
+for each row
 
-create trigger venda
-after insert on vendas
-for
+begin
+update palmitos
+set estoque_atual = estoque_atual + new.quantidade_comprada
+where id_palmito = new.id_palmito;
 
+end//
 delimiter ;
+
+insert into compras (id_palmito, quantidade_comprada, data_compra, preco_total) values
+(1, 100, "2024-01-05", 1550.00);
+
+select * from palmitos;
 
 #3. Criação de Views:
 #a) Mostrar a situação atual do estoque.
+create view situacao_estoque as
+select p.id_palmito, p.tipo_palmito, p.estoque_atual from palmitos p group by p.id_palmito;
 
+select * from situacao_estoque;
 
 #b) Exibir o histórico de vendas por tipo de palmito.
+create view historico_vendas as
+select p.id_palmito, p.tipo_palmito, p.estoque_atual, p.preco_venda, v.quantidade_vendida as total_vendido 
+from palmitos p
+join vendas v on p.id_palmito = v.id_palmito
+where p.tipo_palmito = "Pupunha";
+
+select * from historico_vendas;
