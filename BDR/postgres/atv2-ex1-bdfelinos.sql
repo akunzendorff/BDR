@@ -33,23 +33,25 @@ order by round(avg(idade),2) desc;
 /*2)Crie uma consulta para listar o nome e a idade dos gatos cujo brinquedo favorito é
 "Ratinho de borracha" ou "Bolinha de Lã", e que possuem uma idade maior que a
 média de idade de todos os gatos.*/
+
+select avg(idade) from felinos; -- Mostrar a média de idade de todos os gatos
+
 select 
 	nome as "Nome",
-	idade as "Idade"
+	idade as "Idade",
 	brinquedoFavorito as "Brinquedo favorito"
 from felinos
-where brinquedoFavorito = "Ratinho de borracha"
-	and brinquedoFavorito = "Bolinha de lã"
-	and idade > round(avg(idade),2);
+where (brinquedoFavorito = 'Ratinho de borracha' or brinquedoFavorito = 'Bolinha de lã')
+and idade > (select avg(idade) from felinos);
 
 /*3)Crie uma consulta para listar os gatos que têm mais de 5 anos de idade e que têm
 como brinquedo favorito "Ratinho de borracha", ordenando os resultados por
 idade, da mais velha para a mais nova.*/
 select
-	nome as "Nome"
-	idade as "Idade"
+	nome as "Nome",
+	idade as "Idade",
 	brinquedoFavorito as "Brinquedo favorito"
 from felinos
 where idade > 5
-	and brinquedoFavorito = "Ratinho de borracha"
+	and brinquedoFavorito = 'Ratinho de borracha'
 order by idade desc;
