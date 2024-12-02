@@ -56,10 +56,10 @@ insert into usuarios(nome, email, login, senha, acesso) values
 ("Yasmin", "yasmin@abelha.com", "yasmin", "yasmin123", null);
 
 insert into abelhas(nome, caracteristicas, tamanho, ferrao) values
-("", "", "", false),
-("", "", "", true),
-("", "", "", false),
-("", "", "", true);
+("Jataí", "", "", false),
+("Manadaguari", "", "", true),
+("Uruçu", "", "", false),
+("Cauí", "", "", true);
 
 insert into colmeias (nome, locLat, LocLong, tamanho, id_abelha) values
 ("Colmeia 1", "41°24'12.2'N", "2°10'26.5'E", "Grande", 1),
