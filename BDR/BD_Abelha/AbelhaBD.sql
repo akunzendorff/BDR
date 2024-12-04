@@ -25,6 +25,8 @@ locLat varchar(255),
 locLong varchar(255),
 tamanho varchar(50),
 id_abelha int,
+id_usuario int,
+constraint id_usuario_fk_colm foreign key (id_usuario) references usuarios(id_usuario),
 constraint id_abelha_fk foreign key (id_abelha) references abelhas(id_abelha)
 );
 
